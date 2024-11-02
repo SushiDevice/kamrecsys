@@ -24,7 +24,7 @@ import numpy as np
 from sklearn.utils import indexable, check_random_state
 from sklearn.model_selection import (
     BaseCrossValidator, PredefinedSplit, train_test_split, KFold)
-from sklearn.model_selection._split import _validate_shuffle_split_init
+#from sklearn.model_selection._split import _validate_shuffle_split_init
 
 # =============================================================================
 # Metadata variables
@@ -52,6 +52,18 @@ __all__ = []
 # =============================================================================
 # Classes
 # =============================================================================
+
+# =============================================================================
+# Custom function
+# =============================================================================
+
+def validate_shuffle_split_init(test_size, train_size):
+    if test_size is not None and not (0 < test_size < 1):
+        raise ValueError("test_size must be a float in (0.0, 1.0) or an integer")
+    if train_size is not None and not (0 < train_size < 1):
+        raise ValueError("train_size must be a float in (0.0, 1.0) or an integer")
+    if test_size is None and train_size is None:
+        raise ValueError("At least one of test_size or train_size must be specified")
 
 
 class ShuffleSplitWithinGroups(BaseCrossValidator):
@@ -86,7 +98,7 @@ class ShuffleSplitWithinGroups(BaseCrossValidator):
 
         super(ShuffleSplitWithinGroups, self).__init__()
 
-        _validate_shuffle_split_init(test_size, train_size)
+        validate_shuffle_split_init(test_size, train_size)  # Updated line
         self.n_splits = int(n_splits)
         self.test_size = test_size
         self.train_size = train_size
